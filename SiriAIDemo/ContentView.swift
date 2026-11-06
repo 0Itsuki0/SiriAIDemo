@@ -28,8 +28,8 @@ struct GroceryEntity: IndexedEntity, Hashable {
     static let defaultQuery = GroceryEntityQuery()
 
     let id: String
-    @Property var name: String
-    @Property var type: GroceryType
+    @Property(title: "grocery name", description: "The name of the grocery") var name: String
+    @Property(title: "grocery type", description: "The type of the grocery") var type: GroceryType
 
     init(id: String, name: String, type: GroceryType) {
         self.id = id
@@ -119,16 +119,17 @@ struct AddGrocery {
 }
 
 @AppIntent(.tool)
-struct OpenCheckoutIntent: OpenIntent {
+struct OpenCheckout: OpenIntent {
     static let title: LocalizedStringResource = "Open checkout."
+    static let description: LocalizedStringResource = "Open the checkout page to finish purchase."
 
     @Dependency var manager: GroceryManager
 
-    @Parameter(title: "Route")
+    @Parameter(title: "Route", description: "In app route (page) to open.")
     var target: AppRoute
 
     func perform() async throws -> some IntentResult {
-        print("OpenCheckoutIntent", #function)
+        print("OpenCheckout", #function)
         await manager.checkout()
         return .result()
     }
